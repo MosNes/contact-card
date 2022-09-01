@@ -2,9 +2,12 @@
   "name": "contact-card-client",
   "version": "1.0.0",
   "description": "Client-Side code for contact-card app",
-  "main": "index.js",
+  "private": "true",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode development",
+    "dev": "webpack-dev-server",
+    "start": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -15,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/MosNes/contact-card/issues"
   },
-  "homepage": "https://github.com/MosNes/contact-card#readme"
+  "homepage": "https://github.com/MosNes/contact-card#readme",
+  "devDependencies": {
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
 }
