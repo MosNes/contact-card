@@ -15,4 +15,31 @@ export const initdb = async () => {
       console.log('contacts store created');
     }
   })
+};
+
+//get all contact records from contacts table
+export const getDb = async () => {
+    //create db connection
+    const contactDb = await openDB('contact_db', 1);
+    //create transaction and specify object store and scope
+    const tx = contactDb.transaction('contacts', 'readonly');
+    //open the chosen object store
+    const store = tx.objectStore('contacts');
+    //use getAll method to get all info in the table
+    const request = store.getAll();
+    //get confirmation of request
+    const result = await request;
+    console.log('result.value', result);
+    return result;
+};
+
+//create new record
+export const postDb = async (name, email, phone, profile) => {
+    const contactDb = await openDB('contact_db', 1);
+    //set readwrite as scope to create new records
+    const tx = contactDb.transaction('contacts', 'readwrite');
+    const store = tx.objectStore('contacts');
+    const request = store.add({ name: name, email: email, phone: phone, profile: profile});
+    const result = await request;
+    console.log('Data saved to the database', result);
 }
