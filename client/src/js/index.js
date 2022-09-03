@@ -1,7 +1,7 @@
 //import modules
 import './form';
 import { toggleForm, clearForm } from './form';
-import { initdb, getDb, postDb } from './database';
+import { initdb, getDb, postDb, deleteDb } from './database';
 import { fetchCards } from './cards';
 
 //import static images
@@ -15,6 +15,15 @@ import '../css/index.css';
 //import Bootstrap
 import { Tooltip, Toast, Popover } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
+
+window.deleteCard = (e) => {
+  //grab id from button element attached to contact card
+  let id = parseInt(e.id);
+  //delete the card
+  deleteDb(id);
+  //reload DOM
+  fetchCards();
+}
 
 window.addEventListener('load', function () {
     initdb();
@@ -59,3 +68,5 @@ window.addEventListener('load', function () {
   // Reload the DOM
   fetchCards();
   });
+
+ 
