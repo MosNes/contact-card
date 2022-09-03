@@ -43,3 +43,34 @@ export const postDb = async (name, email, phone, profile) => {
     const result = await request;
     console.log('Data saved to the database', result);
 }
+
+//delete record by id
+export const deleteDb = async (id) => {
+  console.log('DELETE from the database', id);
+
+  //create connection
+  const contactDb = await openDB('contact_db', 1);
+
+  //set readwrite as scope to delete a record
+  const tx = contactDb.transaction('contacts', 'readwrite');
+  const store = tx.objectStore('contacts');
+
+  //use .delete() method to delete item by id
+  const request = store.delete(id);
+  const result = await request;
+  console.log('result.value', result);
+  return result?.value;
+}
+
+//edit record by id
+export const editDb = async (id, name, email, phone, profile) => {
+  console.log('Updating record with id:', id);
+  const contactDb = await openDB('contact_db', 1);
+  const tx = contactDb.transaction('contacts', 'readwrite');
+  const store = tx.objectStore('contacts');
+
+  //use .put() method to edit item by id
+  const request = store.put({ id:id, name: name, email: email, phone: phone, profile: profile});
+  const result = await request;
+  console.log('data saved tot the database', result);
+}
