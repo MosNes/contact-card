@@ -1,7 +1,7 @@
 //import modules
 import './form';
 import { toggleForm, clearForm } from './form';
-import { initdb, getDb, postDb, deleteDb } from './database';
+import { initdb, getDb, postDb, deleteDb, editDb } from './database';
 import { fetchCards } from './cards';
 
 //import static images
@@ -16,14 +16,7 @@ import '../css/index.css';
 import { Tooltip, Toast, Popover } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-window.deleteCard = (e) => {
-  //grab id from button element attached to contact card
-  let id = parseInt(e.id);
-  //delete the card
-  deleteDb(id);
-  //reload DOM
-  fetchCards();
-}
+
 
 window.addEventListener('load', function () {
     initdb();
@@ -50,12 +43,12 @@ window.addEventListener('load', function () {
   let phone = document.getElementById("phone").value;
   let email = document.getElementById("email").value;
   let profile = document.querySelector('input[type="radio"]:checked').value;
-  
+
     // Post form data to IndexedDB OR Edit an existing card in IndexedDB
   if (submitBtnToUpdate == false) {
     postDb(name, email, phone, profile);
   } else {
-  
+    editDb(profileId, name, email, phone, profile);
     fetchCards();
       // Toggles the submit button back to POST functionality
     submitBtnToUpdate = false;
@@ -69,4 +62,37 @@ window.addEventListener('load', function () {
   fetchCards();
   });
 
- 
+//deleteCard must be scoped to window, otherwise the onClick=deleteCard(this) property of all the
+//html delete buttons fails
+window.deleteCard = (e) => {
+  //grab id from button element attached to contact card
+  let id = parseInt(e.id);
+  //delete the card
+  deleteDb(id);
+  //reload DOM
+  fetchCards();
+}
+
+//triggered by onclick property of edit buttons
+window.editCard = (e) => {
+  //grabs the id from the button element attached to the contact card and
+  //sets the global profileId variable that will be used in the form element
+  profileId = parseInt(e.dataset.id);
+
+  //grabs info to prepopulate edit form
+  let editName = e.dataset.name;
+  let editEmail = e.dataset.email;
+  let editPhone = e.dataset.phone;
+
+  //set values of the input fields to captured data
+  document.getElementById('name').value = editName;
+  document.getElementById('email').value = editEmail;
+  document.getElementById('phone').value = editPhone;
+
+  //show hidden form element
+  form.style.display = 'block';
+
+  //toggles submit button so that it now updates an existing contact instead of
+  //posting a new one
+  submitBtnToUpdate = true;
+}
