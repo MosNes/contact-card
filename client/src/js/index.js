@@ -16,7 +16,12 @@ import '../css/index.css';
 import { Tooltip, Toast, Popover } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-
+if ('serviceWorker' in navigator) {
+  // use the window load event to keep the page load performant
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js');
+  })
+}
 
 window.addEventListener('load', function () {
     initdb();
