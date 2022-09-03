@@ -11,6 +11,7 @@ import Dog from '../images/dog.png';
 
 //import css
 import '../css/index.css';
+
 //import Bootstrap
 import { Tooltip, Toast, Popover } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
