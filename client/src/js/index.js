@@ -24,48 +24,71 @@ if ('serviceWorker' in navigator) {
 }
 
 window.addEventListener('load', function () {
-    initdb();
-    fetchCards();
-    document.getElementById('logo').src = Logo;
-    document.getElementById('bearThumbnail').src = Bear;
-    document.getElementById('dogThumbnail').src = Dog;
+  initdb();
+  fetchCards();
+  document.getElementById('logo').src = Logo;
+  document.getElementById('bearThumbnail').src = Bear;
+  document.getElementById('dogThumbnail').src = Dog;
 });
 
-  // Form functionality
-  const form = document.getElementById("formToggle");
-  const newContactButton = document.getElementById("new-contact");
-  let submitBtnToUpdate = false;
-  let profileId;
-  
-  newContactButton.addEventListener('click', event => {
-    toggleForm()
-   })
-  
-  form.addEventListener('submit', event => {
-    // Handle data
-    event.preventDefault();
+//install button
+const installBtn = document.getElementById('installBtn');
+
+//event listener to make install button visible
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  installBtn.style.visibility = 'visible';
+  installBtn.addEventListener('click', () => {
+    //prompt user for installation
+    event.prompt();
+    //if user allows install, disable button and change text to Installed!
+    installBtn.setAttribute('disabled', true);
+    installBtn.textContent = 'Installed!';
+  });
+});
+
+//event listener to check if app is installed
+window.addEventListener('appinstalled', (event) => {
+  console.log('installed', 'appinstalled', event);
+})
+
+
+
+// Form functionality
+const form = document.getElementById("formToggle");
+const newContactButton = document.getElementById("new-contact");
+let submitBtnToUpdate = false;
+let profileId;
+
+newContactButton.addEventListener('click', event => {
+  toggleForm()
+})
+
+form.addEventListener('submit', event => {
+  // Handle data
+  event.preventDefault();
   let name = document.getElementById("name").value;
   let phone = document.getElementById("phone").value;
   let email = document.getElementById("email").value;
   let profile = document.querySelector('input[type="radio"]:checked').value;
 
-    // Post form data to IndexedDB OR Edit an existing card in IndexedDB
+  // Post form data to IndexedDB OR Edit an existing card in IndexedDB
   if (submitBtnToUpdate == false) {
     postDb(name, email, phone, profile);
   } else {
     editDb(profileId, name, email, phone, profile);
     fetchCards();
-      // Toggles the submit button back to POST functionality
+    // Toggles the submit button back to POST functionality
     submitBtnToUpdate = false;
   }
-  
+
   // Clear form
   clearForm();
   // Toggle form
   toggleForm();
   // Reload the DOM
   fetchCards();
-  });
+});
 
 //deleteCard must be scoped to window, otherwise the onClick=deleteCard(this) property of all the
 //html delete buttons fails
